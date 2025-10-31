@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Регистрация</title>
+  <link rel="stylesheet" href="{% static 'students/style.css' %}">
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, #0b0f1a, #1c1f2a);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .auth-box {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      width: 360px;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: none;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background: #28a745;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover { background: #218838; }
+    a { color: #00bfff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="auth-box">
+    <h2>Регистрация</h2>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" placeholder="{{ field.label }}" required>
+      {% endfor %}
+      <button type="submit">Создать аккаунт</button>
+    </form>
+    <p style="margin-top:15px;">Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+  </div>
+</body>
+</html>

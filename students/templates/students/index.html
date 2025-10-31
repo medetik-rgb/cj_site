@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список студентов</title>
+    <link rel="stylesheet" href="{% static 'students/style.css' %}">
+    <style>
+        body {
+            background: linear-gradient(145deg, #f3f5fa, #e5ebf9);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .logout-form {
+            text-align: right;
+            margin: 20px 40px 0 0;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #007bff;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .logout-btn:hover {
+            color: #0056b3;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #1C1F2A;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        h1::before {
+            content: "🎓";
+            font-size: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead {
+            background: #1C1F2A;
+            color: white;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        tbody tr:hover {
+            background-color: #f8faff;
+        }
+
+        img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        .add-btn {
+            background: linear-gradient(90deg, #6675F7, #5DE0E6);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 16px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .add-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102,117,247,0.3);
+        }
+
+        .clubs {
+            margin-top: 6px;
+        }
+
+        .club-tag {
+            background: #eef3ff;
+            color: #3949ab;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin: 2px;
+            display: inline-block;
+        }
+
+        p.no-students {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <!-- Безопасная кнопка выхода -->
+    <form class="logout-form" action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="logout-btn">Выйти</button>
+    </form>
+
+    <div class="container">
+        <h1>Список студентов</h1>
+
+        {% if students %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Фото</th>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                        <th>Группа</th>
+                        <th>Клубы</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td data-label="Фото">
+                                {% if student.photo %}
+                                    <img src="{{ student.photo.url }}" alt="Фото {{ student.first_name }}">
+                                {% else %}
+                                    <img src="https://avatars.mds.yandex.net/i?id=4849d6a27fc6934c774d42f7878fd3a20bf31c4e-5298260-images-thumbs&n=13" 
+                                         alt="Нет фото">
+                                {% endif %}
+                            </td>
+                            <td data-label="Имя">{{ student.first_name }}</td>
+                            <td data-label="Фамилия">{{ student.last_name }}</td>
+                            <td data-label="Группа">{{ student.group }}</td>
+                            <td data-label="Клубы" class="clubs">
+                                {% for club in student.clubs.all %}
+                                    <span class="club-tag">{{ club.name }}</span>
+                                {% empty %}
+                                    <span style="color:#aaa;">—</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-students">❌ Студентов пока нет</p>
+        {% endif %}
+
+        <p style="text-align: center; margin-top: 30px;">
+            <a href="{% url 'add_student' %}" class="add-btn">➕ Добавить студента</a>
+        </p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,137 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить студента</title>
+    <link rel="stylesheet" href="{% static 'students/style.css' %}">
+    <style>
+        body {
+            background: linear-gradient(145deg, #f3f5fa, #e5ebf9);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            width: 420px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            font-weight: 600;
+            color: #1C1F2A;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        input[type="file"] {
+            border: none;
+        }
+
+        .clubs-container {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .clubs-container label {
+            display: block;
+            font-weight: 400;
+        }
+
+        button {
+            background: linear-gradient(90deg, #6675F7, #5DE0E6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.03);
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            color: #6675F7;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Добавить студента</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label>Имя:</label>
+        <input type="text" name="first_name" required>
+
+        <label>Фамилия:</label>
+        <input type="text" name="last_name" required>
+
+        <label>Возраст:</label>
+        <input type="number" name="age" required>
+
+        <label>Группа:</label>
+        <select name="group" required>
+            <option value="">— выберите группу —</option>
+            {% for group in groups %}
+                <option value="{{ group.id }}">{{ group.name }} ({{ group.curator }})</option>
+            {% endfor %}
+        </select>
+
+        <div class="clubs-container">
+            <label>Клубы:</label>
+            {% for club in clubs %}
+                <label>
+                    <input type="checkbox" name="clubs" value="{{ club.id }}"> {{ club.name }}
+                </label>
+            {% endfor %}
+        </div>
+
+        <label>Фото:</label>
+        <input type="file" name="photo" accept="image/*">
+
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <a href="{% url 'student_list' %}">← Назад к списку студентов</a>
+</div>
+
+</body>
+</html>

@@ -81,3 +81,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "student_list"
 LOGOUT_REDIRECT_URL = "login"
+
+# --- CSRF & Cookies для Railway ---
+CSRF_TRUSTED_ORIGINS = ['https://web-production-de7a2.up.railway.app']
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'

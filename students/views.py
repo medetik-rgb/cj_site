@@ -57,8 +57,12 @@ def register(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data["password"])
             user.save()
-            login(request, user)
+            login(request, user)  # авторизация сразу после регистрации
             return redirect("student_list")
+        else:
+            # если форма невалидна — отобразить ошибки
+            return render(request, "students/register.html", {"form": form})
     else:
         form = RegisterForm()
     return render(request, "students/register.html", {"form": form})
+

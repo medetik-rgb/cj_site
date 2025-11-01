@@ -49,10 +49,15 @@
 <body>
   <div class="auth-box">
     <h2>Регистрация</h2>
-    <form method="post">
+    <!-- ✅ важно: добавляем action и enctype -->
+    <form method="post" action="{% url 'register' %}" enctype="multipart/form-data">
       {% csrf_token %}
       {% for field in form %}
-        <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" placeholder="{{ field.label }}" required>
+        <input 
+          type="{{ field.field.widget.input_type }}" 
+          name="{{ field.name }}" 
+          placeholder="{{ field.label }}" 
+          required>
       {% endfor %}
       <button type="submit">Создать аккаунт</button>
     </form>
